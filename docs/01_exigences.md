@@ -44,12 +44,12 @@ Types de diplômes :
 
 ### 2.2 Gestion des UE
 
-| ID    | Exigence                                                                   | Commande                                    | Source |
-| ----- | -------------------------------------------------------------------------- | ------------------------------------------- | ------ |
-| EX-06 | Créer une UE (ECTS, CM, TD, TP) dans le diplôme et l'année sélectionnés.   | `CREATE UE <name> <ects> <cm> <td> <tp>`    | 22     |
-| EX-07 | Modifier une UE du diplôme et de l'année sélectionnés.                     | `EDIT UE <old> <new> <ects> <cm> <td> <tp>` | 30     |
-| EX-08 | Supprimer une UE (demandé en p.14, mais commande non définie : voir Q-01). | à définir                                   | 14     |
-| EX-09 | Mutualiser une UE existante dans une année d'un autre diplôme.             | `ASSIGN UE <name> <diplome> <year>`         | 30     |
+| ID    | Exigence                                                                                                                                                                           | Commande                                    | Source   |
+| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | -------- |
+| EX-06 | Créer une UE (ECTS, CM, TD, TP) dans le diplôme et l'année sélectionnés.                                                                                                           | `CREATE UE <name> <ects> <cm> <td> <tp>`    | 22       |
+| EX-07 | Modifier une UE du diplôme et de l'année sélectionnés.                                                                                                                             | `EDIT UE <old> <new> <ects> <cm> <td> <tp>` | 30       |
+| EX-08 | Supprimer une UE de l'année sélectionnée. Si elle est mutualisée, seul le lien avec cette année est supprimé. Si c'était son dernier lien, l'UE et ses affectations disparaissent. | `DELETE UE <name>`                          | 14, Q-01 |
+| EX-09 | Mutualiser une UE existante dans une année d'un autre diplôme.                                                                                                                     | `ASSIGN UE <name> <diplome> <year>`         | 30       |
 
 ### 2.3 Gestion des enseignants
 
@@ -75,32 +75,37 @@ Types de diplômes :
 
 ### 2.6 Persistance et entrées/sorties
 
-| ID    | Exigence                                                                                                                | Source |
-| ----- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
-| EX-17 | Sauvegarder l'état du système et le recharger pour une utilisation en plusieurs fois (fichiers simples JSON ou SQLite). | 4, 15  |
-| EX-18 | Lire des instructions sur l'entrée standard (boucle REPL) : `prototype`.                                                | 17     |
-| EX-19 | Lire des instructions depuis un fichier texte : `prototype source.txt`.                                                 | 17     |
-| EX-20 | Ignorer les lignes commençant par `--`.                                                                                 | 33     |
-| EX-21 | Terminer le programme avec `EXIT`.                                                                                      | 23     |
+| ID    | Exigence                                                                                                                                                                          | Source      |
+| ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| EX-17 | Sauvegarder automatiquement l'état après chaque commande modifiante dans `data/offre.json`, et le charger au démarrage. Un fichier illisible produit une erreur sans être écrasé. | 4, 15, Q-10 |
+| EX-18 | Lire des instructions sur l'entrée standard (boucle REPL) : `prototype`.                                                                                                          | 17          |
+| EX-19 | Lire des instructions depuis un fichier texte : `prototype source.txt`.                                                                                                           | 17          |
+| EX-20 | Ignorer les lignes commençant par `--`.                                                                                                                                           | 33          |
+| EX-21 | Terminer le programme avec `EXIT`.                                                                                                                                                | 23          |
 
 ## 3. Règles métier
 
-| ID    | Règle                                                                                                                                                                                              | Source |
-| ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| RG-01 | Une année de diplôme doit totaliser exactement 60 ECTS.                                                                                                                                            | 9      |
-| RG-02 | Une année contient au maximum 6 UE.                                                                                                                                                                | 9      |
-| RG-03 | Pour une UE, CM + TD + TP ≤ 30h.                                                                                                                                                                   | 9      |
-| RG-04 | Un enseignant ne peut pas dépasser 90h au total.                                                                                                                                                   | 10     |
-| RG-05 | Le nom d'un diplôme, d'une UE ou d'un enseignant est son identifiant unique.                                                                                                                       | 15     |
-| RG-06 | Un nom ne peut pas être un mot-clé réservé : `ALL`, `ASSIGN`, `COVER`, `COST`, `CREATE`, `DEGREE`, `DISPLAY`, `EDIT`, `EXIT`, `GET`, `GRAPH`, `SELECT`, `TEACHER`, `TOTAL`, `TRACE`, `UE`, `YEAR`. | 16     |
-| RG-07 | Les types de diplôme autorisés sont LicencePro, Licence, BUT, Master (1, 3, 3, 2 années).                                                                                                          | 9, 18  |
-| RG-08 | Un diplôme a un nombre maximum d'étudiants.                                                                                                                                                        | 10     |
-| RG-09 | Une UE peut être mutualisée entre plusieurs diplômes.                                                                                                                                              | 10     |
-| RG-10 | Les enseignements sont découpés en séances de 2h, et chaque séance nécessite un enseignant.                                                                                                        | 8      |
-| RG-11 | Les promotions ne sont pas divisées en groupes (1 CM, 1 TD, 1 TP par UE).                                                                                                                          | 8      |
-| RG-12 | Coût : 1h de TD ou de TP = 40 €, 1h de CM = 60 € (1,5 fois plus).                                                                                                                                  | 13     |
-| RG-13 | Couverture d'une UE = heures affectées / (CM + TD + TP). Pour un diplôme ou l'OF, calculée sur les UE qu'ils contiennent.                                                                          | 31-32  |
-| RG-14 | Les semestres et les parcours ne sont pas gérés.                                                                                                                                                   | 7, 10  |
+| ID    | Règle                                                                                                                                                                                                                 | Source     |
+| ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| RG-01 | Une année de diplôme doit totaliser exactement 60 ECTS.                                                                                                                                                               | 9          |
+| RG-02 | Une année contient au maximum 6 UE.                                                                                                                                                                                   | 9          |
+| RG-03 | Pour une UE, CM + TD + TP ≤ 30h.                                                                                                                                                                                      | 9          |
+| RG-04 | Un enseignant ne peut pas dépasser 90h au total.                                                                                                                                                                      | 10         |
+| RG-05 | Le nom d'un diplôme, d'une UE ou d'un enseignant est son identifiant unique.                                                                                                                                          | 15         |
+| RG-06 | Un nom ne peut pas être un mot-clé réservé : `ALL`, `ASSIGN`, `COVER`, `COST`, `CREATE`, `DEGREE`, `DELETE`, `DISPLAY`, `EDIT`, `EXIT`, `GET`, `GRAPH`, `HOURS`, `SELECT`, `TEACHER`, `TOTAL`, `TRACE`, `UE`, `YEAR`. | 16, Q-01   |
+| RG-07 | Les types de diplôme autorisés sont LicencePro, Licence, BUT, Master (1, 3, 3, 2 années).                                                                                                                             | 9, 18      |
+| RG-08 | Un diplôme a un nombre maximum d'étudiants.                                                                                                                                                                           | 10         |
+| RG-09 | Une UE peut être mutualisée entre plusieurs diplômes.                                                                                                                                                                 | 10         |
+| RG-10 | Les enseignements sont découpés en séances de 2h, et chaque séance nécessite un enseignant.                                                                                                                           | 8          |
+| RG-11 | Les promotions ne sont pas divisées en groupes (1 CM, 1 TD, 1 TP par UE).                                                                                                                                             | 8          |
+| RG-12 | Coût : 1h de TD ou de TP = 40 €, 1h de CM = 60 € (1,5 fois plus).                                                                                                                                                     | 13         |
+| RG-13 | Couverture d'une UE = heures affectées / (CM + TD + TP). Pour un diplôme ou l'OF, calculée sur les UE qu'ils contiennent.                                                                                             | 31-32      |
+| RG-14 | Les semestres et les parcours ne sont pas gérés.                                                                                                                                                                      | 7, 10      |
+| RG-15 | Les heures CM, TD et TP sont des entiers pairs positifs ou nuls. CM + TD + TP > 0.                                                                                                                                    | Q-08, Q-12 |
+| RG-16 | Le nombre maximum d'étudiants est un entier strictement positif.                                                                                                                                                      | Q-13       |
+| RG-17 | Les heures affectées à une UE ne peuvent pas dépasser son total CM + TD + TP.                                                                                                                                         | Q-07       |
+| RG-18 | Les noms sont uniques dans toute l'OF, toutes catégories confondues.                                                                                                                                                  | Q-03       |
+| RG-19 | La création d'une UE est refusée si le total ECTS de l'année dépasse 60. Une année sous 60 ECTS déclenche un avertissement à l'affichage.                                                                             | Q-06       |
 
 ## 4. Exigences non fonctionnelles
 
@@ -115,30 +120,10 @@ Types de diplômes :
 | NF-07 | Le code source doit pouvoir être recompilé/interprété et testé à partir du zip.                                                | 51     |
 | NF-08 | Méthode XP : 1 livraison, 4 itérations, tests écrits avec le code.                                                             | 3, 41  |
 
-## 5. Questions ouvertes pour le client
+## 5. Questions pour le client
 
-À reporter dans `suivi_decisions.md` avec la date et la décision.
+Les 13 questions (Q-01 à Q-13) ont été tranchées le 2026-11-21. Voir `suivi_decisions.md`.
 
-| ID   | Question                                                                                                                                                                                                        | Exigences concernées |
-| ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| Q-01 | Aucune commande de suppression n'existe alors que le sujet demande de supprimer des UE. Faut-il ajouter `DELETE UE <name>` ?                                                                                    | EX-08                |
-| Q-02 | Comment distinguer `ASSIGN UE <name> <diplome> <year>` de `ASSIGN <ue> <teacher> <hours>` ? Une UE ou un enseignant nommé `UE` est interdit (mot-clé), donc le premier mot après `ASSIGN` suffit-il ?           | EX-09, EX-11, RG-06  |
-| Q-03 | Les noms sont-ils uniques au sein de chaque catégorie, ou globalement ? `GET HOURS <name>` accepte un enseignant, une UE ou un diplôme, donc un doublon entre catégories crée une ambiguïté.                    | RG-05, EX-12         |
-| Q-04 | Pour un enseignant, l'identifiant est-il le nom seul ? Deux enseignants de même nom et de prénoms différents sont interdits (p.15).                                                                             | EX-10, RG-05         |
-| Q-05 | Une UE mutualisée est-elle comptée une seule fois ou une fois par diplôme dans `GET HOURS ALL`, `GET COST ALL` et `GET COVER ALL` ?                                                                             | EX-12, EX-13, EX-14  |
-| Q-06 | Le contrôle des 60 ECTS est-il bloquant à chaque ajout d'UE, ou seulement vérifié à l'affichage ? (Impossible d'atteindre exactement 60 en créant une UE à la fois si le contrôle est bloquant à chaque ajout.) | RG-01                |
-| Q-07 | Peut-on affecter plus d'heures à une UE que son total (ex. 35h sur une UE de 30h) ? Peut-on affecter plusieurs fois le même enseignant à la même UE ?                                                           | EX-11, RG-13         |
-| Q-08 | Les heures CM, TD et TP doivent-elles être des multiples de 2 (séances de 2h) ?                                                                                                                                 | RG-10, EX-06         |
-| Q-09 | Que fait `EDIT UE` sur une UE mutualisée : modification partout ? Que devient la sauvegarde d'un diplôme supprimé ou renommé ?                                                                                  | EX-07, EX-09         |
-| Q-10 | Où est sauvegardé l'état : automatiquement après chaque commande, ou via une commande explicite (`SAVE`/`LOAD`) ? Le sujet ne définit aucune commande de sauvegarde.                                            | EX-17                |
-| Q-11 | `GET COST`/`GET HOURS` d'un enseignant : donne-t-on seulement ses heures, ou aussi le coût associé ?                                                                                                            | EX-12, EX-13         |
-| Q-12 | Que retourne `GET COVER` quand une UE a 0h au total ?                                                                                                                                                           | EX-14                |
-| Q-13 | Le maximum d'étudiants (RG-08) est-il utilisé dans un calcul, ou simplement stocké ?                                                                                                                            | RG-08                |
+## 6. Hypothèses
 
-## 6. Hypothèses provisoires (en attendant les réponses du client)
-
-- H-01 : un nom est unique dans toute l'OF, toutes catégories confondues (Q-03).
-- H-02 : une UE mutualisée est comptée une seule fois dans les totaux globaux (Q-05).
-- H-03 : le contrôle des 60 ECTS est vérifié à l'affichage et par une commande de validation, et n'est pas bloquant à la création (Q-06).
-- H-04 : l'état est sauvegardé automatiquement après chaque commande modifiante (Q-10).
-- H-05 : on ajoute `DELETE UE <name>` en story de priorité basse (Q-01).
+Les hypothèses H-01 à H-05 sont confirmées par le MOA. Voir `suivi_decisions.md`.
