@@ -106,19 +106,26 @@ Types de diplômes :
 | RG-17 | Les heures affectées à une UE ne peuvent pas dépasser son total CM + TD + TP.                                                                                                                                         | Q-07       |
 | RG-18 | Les noms sont uniques dans toute l'OF, toutes catégories confondues.                                                                                                                                                  | Q-03       |
 | RG-19 | La création d'une UE est refusée si le total ECTS de l'année dépasse 60. Une année sous 60 ECTS déclenche un avertissement à l'affichage.                                                                             | Q-06       |
+| RG-20 | Les ECTS d'une UE sont un entier strictement positif.                                                                                                                                                                 | Q-14       |
+| RG-21 | Les pourcentages de couverture sont arrondis au demi supérieur (12,5 donne 13).                                                                                                                                       | Q-15       |
+| RG-22 | Une UE ne peut être liée qu'une seule fois à un même diplôme.                                                                                                                                                         | Q-16       |
+| RG-23 | Le diplôme et l'année sélectionnés sont sauvegardés. Quand `offre.json` est réécrit, l'ancienne version est copiée dans `offre.json.bak`.                                                                             | Q-17       |
+| RG-24 | Les heures d'un `ASSIGN` sont un entier strictement positif.                                                                                                                                                          | Q-18       |
+| RG-25 | Un nom est un seul mot (sans espace) et sensible à la casse. Les mots-clés sont reconnus sans tenir compte de la casse.                                                                                               | Q-19       |
 
 ## 4. Exigences non fonctionnelles
 
-| ID    | Exigence                                                                                                                       | Source |
-| ----- | ------------------------------------------------------------------------------------------------------------------------------ | ------ |
-| NF-01 | Langage : Python. Tests : `unittest`.                                                                                          | 3, 35  |
-| NF-02 | Interface en console (TUI), sans interface graphique.                                                                          | 4, 35  |
-| NF-03 | Le programme gère les erreurs (commande inconnue, argument invalide, règle métier violée) sans planter, avec un message clair. | 4      |
-| NF-04 | Le code respecte une norme (PEP 8, vérifiée avec flake8).                                                                      | 51     |
-| NF-05 | Les données sont stockées en fichiers simples (JSON) ou SQLite.                                                                | 4      |
-| NF-06 | Graphviz doit être installé sur la machine pour `TRACE GRAPH`.                                                                 | 5      |
-| NF-07 | Le code source doit pouvoir être recompilé/interprété et testé à partir du zip.                                                | 51     |
-| NF-08 | Méthode XP : 1 livraison, 4 itérations, tests écrits avec le code.                                                             | 3, 41  |
+| ID    | Exigence                                                                                                                                                                                                                     | Source |
+| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| NF-01 | Langage : Python. Tests : `unittest`.                                                                                                                                                                                        | 3, 35  |
+| NF-02 | Interface en console (TUI), sans interface graphique.                                                                                                                                                                        | 4, 35  |
+| NF-03 | Le programme gère les erreurs (commande inconnue, argument invalide, règle métier violée) sans planter, avec un message clair.                                                                                               | 4      |
+| NF-04 | Le code respecte une norme (PEP 8, vérifiée avec flake8).                                                                                                                                                                    | 51     |
+| NF-05 | Les données sont stockées en fichiers simples (JSON) ou SQLite.                                                                                                                                                              | 4      |
+| NF-06 | Graphviz doit être installé sur la machine pour `TRACE GRAPH`.                                                                                                                                                               | 5      |
+| NF-07 | Le code source doit pouvoir être recompilé/interprété et testé à partir du zip.                                                                                                                                              | 51     |
+| NF-08 | Méthode XP : 1 livraison, 4 itérations, tests écrits avec le code.                                                                                                                                                           | 3, 41  |
+| NF-09 | Une commande modifiante réussie affiche `OK ...`, les commandes `GET` affichent uniquement la valeur entière, les erreurs affichent `ERREUR : ...` (avec le numéro de ligne en mode fichier) et n'arrêtent pas le programme. | Q-20   |
 
 ## 5. Questions pour le client
 
