@@ -23,3 +23,5 @@ dot -Tpng docs/diagrams/activite_couverture.dot -o docs/diagrams/activite_couver
 dot -Tpng docs/diagrams/sequence_assign.dot -o docs/diagrams/sequence_assign.png
 dot -Tpng docs/diagrams/sequence_create_ue.dot -o docs/diagrams/sequence_create_ue.png
 dot -Tpng docs/diagrams/sequence_trace_graph.dot -o docs/diagrams/sequence_trace_graph.png
+
+dot -Tpng docs/conception/classes_it1.dot -o docs/conception/classes_it1.png
