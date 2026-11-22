@@ -1,0 +1,29 @@
+// Diagramme d'activités : calcul de la couverture (GET COVER <nom>)
+digraph activite_couverture {
+  rankdir=TB;
+  node [fontname="Helvetica", fontsize=11];
+  edge [fontname="Helvetica", fontsize=9];
+
+  debut [shape=circle, style=filled, fillcolor=black, label="", width=0.25];
+  fin   [shape=doublecircle, style=filled, fillcolor=black, label="", width=0.2];
+
+  type    [shape=diamond, label="Que désigne le nom ?"];
+  ens     [shape=box, style=rounded, label="Afficher ERREUR\n(sans sens pour un enseignant)"];
+  inconnu [shape=box, style=rounded, label="Afficher ERREUR\n(nom introuvable)"];
+  liste   [shape=box, style=rounded, label="Prendre la liste des UE\n(1 UE, celles du diplôme, ou toutes\nsans doublon pour ALL)"];
+  somme   [shape=box, style=rounded, label="affectées = somme des heures affectées\ntotal = somme de CM + TD + TP"];
+  arrondi [shape=box, style=rounded, label="pourcentage = affectées × 100 / total\narrondi au demi supérieur"];
+  vide    [shape=diamond, label="total = 0 ?"];
+  zero    [shape=box, style=rounded, label="Afficher 0"];
+  afficher [shape=box, style=rounded, label="Afficher le pourcentage entier"];
+
+  debut -> type;
+  type -> ens [label="enseignant"];
+  type -> inconnu [label="inconnu"];
+  type -> liste [label="UE, diplôme ou ALL"];
+  liste -> somme -> vide;
+  vide -> zero [label="oui (diplôme vide)"];
+  vide -> arrondi [label="non"];
+  arrondi -> afficher;
+  ens -> fin; inconnu -> fin; zero -> fin; afficher -> fin;
+}

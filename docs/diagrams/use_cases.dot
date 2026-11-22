@@ -1,0 +1,63 @@
+// Diagramme de cas d'utilisation : offre de formation
+digraph cas_utilisation {
+  rankdir=LR;
+  fontname="Helvetica";
+  node [fontname="Helvetica", fontsize=11];
+  edge [fontname="Helvetica", fontsize=9];
+
+  gestionnaire [label="Gestionnaire\n(utilisateur)", shape=box, style="rounded,filled", fillcolor="#eeeeee"];
+  graphviz [label="Graphviz\n(outil externe)", shape=box, style="rounded,filled", fillcolor="#eeeeee"];
+
+  subgraph cluster_systeme {
+    label="Système : gestion de l'offre de formation";
+    style=rounded;
+    node [shape=ellipse, style=filled, fillcolor="#ffffff"];
+
+    uc_lire    [label="Saisir des commandes\n(REPL ou fichier) US-01"];
+    uc_valider [label="Valider les saisies\nUS-02"];
+    uc_diplome [label="Créer un diplôme\nUS-03"];
+    uc_select  [label="Sélectionner diplôme\net année US-04"];
+    uc_ue      [label="Créer une UE\nUS-05"];
+    uc_ens     [label="Enregistrer un enseignant\nUS-06"];
+    uc_aff     [label="Affecter un enseignant\nà une UE US-07"];
+    uc_heures  [label="Calculer les heures\nUS-10"];
+    uc_cout    [label="Calculer le coût\nUS-11"];
+    uc_couv    [label="Calculer la couverture\nUS-12"];
+    uc_aff_txt [label="Afficher un diplôme\nen texte US-13"];
+    uc_edit_d  [label="Modifier un diplôme\nUS-14"];
+    uc_edit_ue [label="Modifier une UE\nUS-15"];
+    uc_mutu    [label="Mutualiser une UE\nUS-16"];
+    uc_suppr   [label="Supprimer une UE\nUS-17"];
+    uc_trace   [label="Tracer l'arbre en PNG\nUS-18"];
+    uc_save    [label="Sauvegarder et charger\nUS-08, US-09"];
+  }
+
+  // le gestionnaire utilise les cas
+  edge [arrowhead=none];
+  gestionnaire -> uc_lire;
+  gestionnaire -> uc_diplome;
+  gestionnaire -> uc_select;
+  gestionnaire -> uc_ue;
+  gestionnaire -> uc_ens;
+  gestionnaire -> uc_aff;
+  gestionnaire -> uc_heures;
+  gestionnaire -> uc_cout;
+  gestionnaire -> uc_couv;
+  gestionnaire -> uc_aff_txt;
+  gestionnaire -> uc_edit_d;
+  gestionnaire -> uc_edit_ue;
+  gestionnaire -> uc_mutu;
+  gestionnaire -> uc_suppr;
+  gestionnaire -> uc_trace;
+  uc_trace -> graphviz;
+
+  // relations d'inclusion
+  edge [arrowhead=open, style=dashed, label="«include»"];
+  uc_lire -> uc_valider;
+  uc_diplome -> uc_save;
+  uc_ue -> uc_save;
+  uc_aff -> uc_save;
+  uc_mutu -> uc_save;
+  uc_suppr -> uc_save;
+  uc_trace -> uc_aff_txt [label="«include»"];
+}

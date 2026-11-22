@@ -55,7 +55,6 @@ Identifiants : **EX** = exigence fonctionnelle, **RG** = règle métier (future 
 | RG-11 | Pas de groupes : 1 CM, 1 TD et 1 TP par UE. Pas de semestres ni de parcours.                                                                                                |
 | RG-12 | Coût : 1 h de CM = 60 €, 1 h de TD ou de TP = 40 €. Le coût dépend du volume de l'UE, pas des heures affectées.                                                             |
 | RG-13 | Couverture d'une UE = heures affectées / (CM + TD + TP).                                                                                                                    |
-| RG-14 | Les ECTS sont un entier strictement positif (RG-20 ci-dessous précise le cas de l'UE).                                                                                      |
 | RG-15 | Une UE a au moins 1 h au total (CM + TD + TP > 0).                                                                                                                          |
 | RG-16 | Le nombre max d'étudiants est un entier strictement positif.                                                                                                                |
 | RG-17 | Les heures affectées à une UE ne dépassent pas son volume total.                                                                                                            |

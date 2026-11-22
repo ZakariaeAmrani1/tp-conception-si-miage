@@ -1,0 +1,36 @@
+// Séquence : TRACE GRAPH LicenceInfo sortie.png
+digraph sequence {
+  rankdir=TB; nodesep=1.1; ranksep=0.45; splines=line;
+  node [fontname="Helvetica", fontsize=11, shape=point, width=0.01, height=0.01];
+  edge [fontname="Helvetica", fontsize=9, arrowhead=none, style=dashed, color="#888888", weight=50];
+
+  U0 [shape=box, label="Gestionnaire"];
+  I0 [shape=box, label="Interpréteur"];
+  G0 [shape=box, label="Générateur DOT"];
+  D0 [shape=box, label="Graphviz (dot)"];
+
+  U0 -> U1 -> U2 -> U3 -> U4 -> U5 -> U6 -> U7 -> U8 -> U9;
+  I0 -> I1 -> I2 -> I3 -> I4 -> I5 -> I6 -> I7 -> I8 -> I9;
+  G0 -> G1 -> G2 -> G3 -> G4 -> G5 -> G6 -> G7 -> G8 -> G9;
+  D0 -> D1 -> D2 -> D3 -> D4 -> D5 -> D6 -> D7 -> D8 -> D9;
+
+  {rank=same; U0 -> I0 -> G0 -> D0 [style=invis, weight=1];}
+  {rank=same; U1 -> I1 -> G1 -> D1 [style=invis, weight=1];}
+  {rank=same; U2 -> I2 -> G2 -> D2 [style=invis, weight=1];}
+  {rank=same; U3 -> I3 -> G3 -> D3 [style=invis, weight=1];}
+  {rank=same; U4 -> I4 -> G4 -> D4 [style=invis, weight=1];}
+  {rank=same; U5 -> I5 -> G5 -> D5 [style=invis, weight=1];}
+  {rank=same; U6 -> I6 -> G6 -> D6 [style=invis, weight=1];}
+  {rank=same; U7 -> I7 -> G7 -> D7 [style=invis, weight=1];}
+  {rank=same; U8 -> I8 -> G8 -> D8 [style=invis, weight=1];}
+  {rank=same; U9 -> I9 -> G9 -> D9 [style=invis, weight=1];}
+
+  edge [arrowhead=normal, style=solid, color=black, weight=1]; U1 -> I1 [label="TRACE GRAPH LicenceInfo sortie.png"];
+  edge [arrowhead=normal, style=solid, color=black, weight=1]; I2 -> G2 [label="construire_dot(diplôme)"];
+  edge [arrowhead=normal, style=dashed, color=black, weight=1]; I3 -> G3 [dir=back, label="texte DOT"];
+  edge [arrowhead=normal, style=solid, color=black, weight=1]; I4 -> G4 [label="lancer dot -Tpng (sous-processus)"];
+  edge [arrowhead=normal, style=solid, color=black, weight=1]; G5 -> D5 [label="texte DOT"];
+  edge [arrowhead=normal, style=dashed, color=black, weight=1]; G6 -> D6 [dir=back, label="fichier PNG, ou erreur si dot est absent"];
+  edge [arrowhead=normal, style=dashed, color=black, weight=1]; I7 -> G7 [dir=back, label="OK, ou ERREUR"];
+  edge [arrowhead=normal, style=dashed, color=black, weight=1]; U8 -> I8 [dir=back, label="affiche le message"];
+}

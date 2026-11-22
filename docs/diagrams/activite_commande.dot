@@ -1,0 +1,42 @@
+// Diagramme d'activités : traitement d'une ligne de commande
+digraph activite_commande {
+  rankdir=TB;
+  node [fontname="Helvetica", fontsize=11];
+  edge [fontname="Helvetica", fontsize=9];
+
+  debut [shape=circle, style=filled, fillcolor=black, label="", width=0.25];
+  fin   [shape=doublecircle, style=filled, fillcolor=black, label="", width=0.2];
+
+  lire    [shape=box, style=rounded, label="Lire une ligne\n(clavier ou fichier)"];
+  ignorer [shape=diamond, label="Ligne vide ou\ncommençant par « -- » ?"];
+  exit    [shape=diamond, label="Commande EXIT ?"];
+  analyser [shape=box, style=rounded, label="Analyser la commande\n(mot-clé, arguments)"];
+  syntaxe [shape=diamond, label="Commande et\narguments valides ?"];
+  regles  [shape=diamond, label="Règles métier\nrespectées ?"];
+  modifier [shape=box, style=rounded, label="Exécuter la commande"];
+  modifiante [shape=diamond, label="Commande\nmodifiante ?"];
+  sauver  [shape=box, style=rounded, label="Sauvegarder\ndata/offre.json"];
+  ok      [shape=box, style=rounded, label="Afficher OK ou le résultat"];
+  erreur  [shape=box, style=rounded, label="Afficher ERREUR : message\n(l'état ne change pas)"];
+  suite   [shape=diamond, label="Encore des lignes ?"];
+
+  debut -> lire;
+  lire -> ignorer;
+  ignorer -> suite [label="oui"];
+  ignorer -> exit [label="non"];
+  exit -> fin [label="oui"];
+  exit -> analyser [label="non"];
+  analyser -> syntaxe;
+  syntaxe -> erreur [label="non"];
+  syntaxe -> regles [label="oui"];
+  regles -> erreur [label="non"];
+  regles -> modifier [label="oui"];
+  modifier -> modifiante;
+  modifiante -> sauver [label="oui"];
+  modifiante -> ok [label="non"];
+  sauver -> ok;
+  ok -> suite;
+  erreur -> suite;
+  suite -> lire [label="oui"];
+  suite -> fin [label="non"];
+}

@@ -1,0 +1,38 @@
+// Séquence : CREATE UE Python 15 10 10 10
+digraph sequence {
+  rankdir=TB; nodesep=1.1; ranksep=0.45; splines=line;
+  node [fontname="Helvetica", fontsize=11, shape=point, width=0.01, height=0.01];
+  edge [fontname="Helvetica", fontsize=9, arrowhead=none, style=dashed, color="#888888", weight=50];
+
+  U0 [shape=box, label="Gestionnaire"];
+  I0 [shape=box, label="Interpréteur"];
+  C0 [shape=box, label="Commande"];
+  O0 [shape=box, label="Offre"];
+  S0 [shape=box, label="Sauvegarde"];
+
+  U0 -> U1 -> U2 -> U3 -> U4 -> U5 -> U6 -> U7 -> U8 -> U9;
+  I0 -> I1 -> I2 -> I3 -> I4 -> I5 -> I6 -> I7 -> I8 -> I9;
+  C0 -> C1 -> C2 -> C3 -> C4 -> C5 -> C6 -> C7 -> C8 -> C9;
+  O0 -> O1 -> O2 -> O3 -> O4 -> O5 -> O6 -> O7 -> O8 -> O9;
+  S0 -> S1 -> S2 -> S3 -> S4 -> S5 -> S6 -> S7 -> S8 -> S9;
+
+  {rank=same; U0 -> I0 -> C0 -> O0 -> S0 [style=invis, weight=1];}
+  {rank=same; U1 -> I1 -> C1 -> O1 -> S1 [style=invis, weight=1];}
+  {rank=same; U2 -> I2 -> C2 -> O2 -> S2 [style=invis, weight=1];}
+  {rank=same; U3 -> I3 -> C3 -> O3 -> S3 [style=invis, weight=1];}
+  {rank=same; U4 -> I4 -> C4 -> O4 -> S4 [style=invis, weight=1];}
+  {rank=same; U5 -> I5 -> C5 -> O5 -> S5 [style=invis, weight=1];}
+  {rank=same; U6 -> I6 -> C6 -> O6 -> S6 [style=invis, weight=1];}
+  {rank=same; U7 -> I7 -> C7 -> O7 -> S7 [style=invis, weight=1];}
+  {rank=same; U8 -> I8 -> C8 -> O8 -> S8 [style=invis, weight=1];}
+  {rank=same; U9 -> I9 -> C9 -> O9 -> S9 [style=invis, weight=1];}
+
+  edge [arrowhead=normal, style=solid, color=black, weight=1]; U1 -> I1 [label="CREATE UE Python 15 10 10 10"];
+  edge [arrowhead=normal, style=solid, color=black, weight=1]; I2 -> C2 [label="exécuter(arguments)"];
+  edge [arrowhead=normal, style=solid, color=black, weight=1]; C3 -> O3 [label="nom libre ? total ECTS ? nombre d'UE ?"];
+  edge [arrowhead=normal, style=dashed, color=black, weight=1]; C4 -> O4 [dir=back, label="valeurs"];
+  edge [arrowhead=normal, style=solid, color=black, weight=1]; C5 -> O5 [label="si valide : ajouter_ue(...)"];
+  edge [arrowhead=normal, style=solid, color=black, weight=1]; O6 -> S6 [label="sauvegarder(offre)"];
+  edge [arrowhead=normal, style=dashed, color=black, weight=1]; I7 -> C7 [dir=back, label="OK, ou ERREUR si une règle est violée"];
+  edge [arrowhead=normal, style=dashed, color=black, weight=1]; U8 -> I8 [dir=back, label="affiche le message"];
+}
