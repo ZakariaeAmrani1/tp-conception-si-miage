@@ -1,43 +1,24 @@
-digraph offreDeFormation {
+// Diagramme de classes : itération 1 (US-01 à US-04)
+digraph classes_it1 {
   rankdir=BT;
   node [shape=record, fontname="Helvetica", fontsize=10];
   edge [fontname="Helvetica", fontsize=9];
 
-  Degree [label="{Degree|- name : String\l- type : Type\l- nbStudents : Integer\l- nbECTS : Integer\l|+ getName() : String\l+ getType() : String\l}"];
-  Type [label="{Type|- name : String\l- nbYears : Integer\l|+ getName() : String\l+ getNbYears() : Integer\l}"];
+  Offre [label="{Offre|- anneeSelectionnee : Integer\l|+ creerDiplome(nom : String, typeNom : String, nbEtudiantsMax : Integer)\l+ selectionnerDiplome(nom : String)\l+ selectionnerAnnee(annee : Integer)\l+ trouverDiplome(nom : String) : Diplome\l}"];
 
-  Degree -> Type [arrowhead=none, taillabel="1", headlabel="0..*", label="est de type"];
+  Diplome [label="{Diplome|- nom : String\l- type: TypeDiplome\l- nbEtudiantsMax : Integer\l- /nbAnnees : Integer\l- /nbEcts : Integer\l}"];
 
+  TypeDiplome [label="{TypeDiplome|- nom : String\l- nbAnnees : Integer\l}"];
 
+  // Composition : l'Offre possède ses diplômes (losange côté Offre)
+  Diplome -> Offre [arrowhead=diamond, taillabel="0..*", headlabel="1", label="diplomes"];
 
+  // Composition : l'Offre possède les types de diplôme
+  TypeDiplome -> Offre [arrowhead=diamond, taillabel="1..*", headlabel="1", label="types"];
 
+  // Association navigable : le diplôme sélectionné (aucun ou un)
+  Offre -> Diplome [arrowhead=vee, headlabel="0..1", label="selection"];
 
-
-
-
-
-
-
-
-
-//   // Une classe : {Nom | attributs | méthodes}   (\l = ligne alignée à gauche)
-//   Livre [label="{Livre|- titre : String\l- nbPages : Integer\l- statut : Statut\l|+ estLibre() : Boolean\l+ emprunter(m : Membre)\l}"];
-//   Roman [label="{Roman|- genre : String\l}"];
-//   Auteur [label="{Auteur|- nom : String\l}"];
-//   Membre [label="{Membre|- nom : String\l- maxLivres : Integer\l}"];
-//   Bibliotheque [label="{Bibliotheque|- nom : String\l|+ ajouterLivre(l : Livre)\l}"];
-
-//   // Énumération : stéréotype entre \<\< \>\>
-//   Statut [label="{\<\<enumeration\>\>\nStatut|LIBRE\lEMPRUNTE\l}"];
-
-//   Roman -> Livre [arrowhead=empty];                                  // héritage
-//   Livre -> Bibliotheque [arrowhead=diamond, taillabel="0..*"];       // composition
-//   Livre -> Auteur [arrowhead=none, taillabel="0..*", headlabel="1..*", label="écrit par"];
-//   Livre -> Membre [arrowhead=none, taillabel="0..*", headlabel="0..1", label="emprunté par"];
-//   Livre -> Statut [style=dashed, arrowhead=open];                    // dépendance
-
-  subgraph cluster_modele {                                          // paquetage
-    label="paquetage modele"; style=rounded;
-    Degree; Type;
-  }
+  // Association navigable : un diplôme a exactement un type
+  Diplome -> TypeDiplome [arrowhead=vee, taillabel="0..*", headlabel="1", label="type"];
 }
