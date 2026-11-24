@@ -1,10 +1,45 @@
-package classes_it1
+# Contraintes OCL de l'itération 1
 
-context Offre::creerDiplome(
-nom : String,
-typeNom : String,
-nbEtudiantsMax : Integer
-)
+Modèle : `classes_it1.dot` (Offre, Diplome, TypeDiplome). Les règles concernées sont RG-05, RG-06, RG-07, RG-08, RG-16 et RG-25.
+Un commentaire OCL commence par `--`.
+
+## Offre
+
+```ocl
+context Offre
+
+    def: motsReserves : Set(String) =
+        Set{'ALL', 'ASSIGN', 'COVER', 'COST', 'CREATE', 'DEGREE', 'DELETE', 'DISPLAY', 'EDIT',
+            'EXIT', 'GET', 'GRAPH', 'HOURS', 'SELECT', 'TEACHER', 'TOTAL', 'TRACE', 'UE', 'YEAR'}
+
+
+    inv nomsDiplomesUniques:
+        self.diplomes->isUnique(d | d.nom)
+
+    inv nomsTypesUniques:
+        self.types->isUnique(t | t.nom)
+
+    inv selectionDansOffre:
+        not self.selection.oclIsUndefined() implies self.diplomes->includes(self.selection)
+
+    inv anneeSelectionneeValide:
+        not self.selection.oclIsUndefined() implies
+            (self.anneeSelectionnee >= 1 and self.anneeSelectionnee <= self.selection.type.nbAnnees)
+```
+
+## Offre::creerDiplome
+
+```ocl
+context Offre::creerDiplome(nom : String, typeNom : String, nbEtudiantsMax : Integer)
+
+    pre nomNonVide:
+        nom.size() > 0
+
+    pre nomUnSeulMot:
+        nom.indexOf(' ') = 0
+
+    pre nomNonReserve:
+        not self.motsReserves->includes(nom.toUpper())
 
     pre nomLibre:
         self.diplomes->forAll(d | d.nom <> nom)
@@ -16,13 +51,10 @@ nbEtudiantsMax : Integer
         nbEtudiantsMax > 0
 
     post unDiplomeDePlus:
-        self.diplomes->size() =
-        self.diplomes@pre->size() + 1
+        self.diplomes->size() = self.diplomes@pre->size() + 1
 
     post diplomeCree:
-        let nouveau : Diplome =
-            self.diplomes->any(x | x.nom = nom)
-        in
+        let nouveau : Diplome = self.diplomes->any(x | x.nom = nom) in
             nouveau.oclIsNew()
             and nouveau.nbEtudiantsMax = nbEtudiantsMax
             and nouveau.type.nom = typeNom
@@ -30,22 +62,28 @@ nbEtudiantsMax : Integer
             and self.anneeSelectionnee = 1
 
     post anciensConserves:
-        self.diplomes@pre->forAll(x |
-            self.diplomes->includes(x)
-        )
+        self.diplomes@pre->forAll(x | self.diplomes->includes(x))
+```
 
+## Offre::selectionnerDiplome
+
+```ocl
 context Offre::selectionnerDiplome(nom : String)
 
     pre diplomeExiste:
         self.diplomes->exists(d | d.nom = nom)
 
-    post unDiplomeSelectionne:
-        let diplome : Diplome =
-            self.diplomes->any(x | x.nom = nom)
-        in
-            self.selection = diplome
-            and self.anneeSelectionnee = 1
+    post diplomeSelectionne:
+        let d : Diplome = self.diplomes->any(x | x.nom = nom) in
+            self.selection = d and self.anneeSelectionnee = 1
 
+    post diplomesInchanges:
+        self.diplomes = self.diplomes@pre
+```
+
+## Offre::selectionnerAnnee
+
+```ocl
 context Offre::selectionnerAnnee(annee : Integer)
 
     pre diplomeSelectionne:
@@ -57,9 +95,16 @@ context Offre::selectionnerAnnee(annee : Integer)
     pre anneeValide:
         annee <= self.selection.type.nbAnnees
 
-    post uneAnneeSelectionnee:
+    post anneeSelectionnee:
         self.anneeSelectionnee = annee
 
+    post diplomeInchange:
+        self.selection = self.selection@pre
+```
+
+## Offre::trouverDiplome
+
+```ocl
 context Offre::trouverDiplome(nom : String) : Diplome
 
     pre diplomeExiste:
@@ -67,30 +112,32 @@ context Offre::trouverDiplome(nom : String) : Diplome
 
     body:
         self.diplomes->any(d | d.nom = nom)
+```
 
-context Offre
+## Diplome
 
-    inv nomsDiplomesUniques:
-        self.diplomes->isUnique(d | d.nom)
-
+```ocl
 context Diplome
 
-    inv nbEtudiantsMaxPositifNonNull:
+    inv nbEtudiantsMaxPositif:
         self.nbEtudiantsMax > 0
 
-context Diplome:: nbAnnees: Integer
+context Diplome::nbAnnees : Integer
 
     derive:
         self.type.nbAnnees
 
-context Diplome:: nbEcts: Integer
+context Diplome::nbEcts : Integer
 
     derive:
         self.nbAnnees * 60
+```
 
-Context TypeDiplome
+## TypeDiplome
 
-    inv nbAnneesPositifNonNull:
+```ocl
+context TypeDiplome
+
+    inv nbAnneesPositif:
         self.nbAnnees > 0
-
-endpackage
+```
