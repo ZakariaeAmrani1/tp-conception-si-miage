@@ -1,0 +1,15 @@
+digraph paquetages_biblio {
+  rankdir=TB;
+  node [shape=tab, fontname="Helvetica", fontsize=11, style=filled, fillcolor="#f4f4f4"];
+  edge [fontname="Helvetica", fontsize=9, style=dashed, arrowhead=open];
+
+  ihm          [label="ihm\n(menus, saisie)"];
+  services     [label="services\n(emprunter, rendre)"];
+  domaine      [label="domaine\n(Livre, Membre, Auteur)"];
+  persistance  [label="persistance\n(lecture, écriture)"];
+
+  ihm -> services      [label="«use»"];
+  services -> domaine  [label="«use»"];
+  services -> persistance [label="«use»"];
+  persistance -> domaine  [label="«use»"];
+}
